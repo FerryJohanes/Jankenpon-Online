@@ -11,6 +11,8 @@ public class Card : MonoBehaviour
     public Vector2 OriginalPosition;
     Vector2 originalScale;
     Color originalcolor;
+    public AudioClip pickAudioClip;
+    public AudioSource pickSource;
 
     bool isClickable = true;
 
@@ -23,6 +25,7 @@ public class Card : MonoBehaviour
 
     public void Onclick()
     {
+        pickSource.PlayOneShot(pickAudioClip, 0.4f);
         player.SetChosenCard(this);
     }
 

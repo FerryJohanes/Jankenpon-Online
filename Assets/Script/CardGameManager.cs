@@ -20,6 +20,13 @@ public class CardGameManager : MonoBehaviour, IOnEventCallback
     public TMP_Text winnerText;
     public TMP_Text pingText;
 
+    public AudioClip damageAudioClip;
+    public AudioSource damageSource;
+    public AudioClip winAudioClip;
+    public AudioSource winSource;
+    public AudioClip drawAudioClip;
+    public AudioSource drawSource;
+
     private CardPlayer damagedPlayer;
     private CardPlayer winner;
     public bool Online = true;
@@ -110,12 +117,14 @@ public class CardGameManager : MonoBehaviour, IOnEventCallback
                     {
                         damagedPlayer.AnimateDamage();
                         ChangeState(GameState.Damages);
+                        damageSource.PlayOneShot(damageAudioClip, 0.2f);
                     }
                     else
                     {
                         P1.AnimateDraw();
                         P2.AnimateDraw();
                         ChangeState(GameState.Draw);
+                        drawSource.PlayOneShot(drawAudioClip, 0.3f);
                     }
                 }
                     break;
@@ -148,6 +157,7 @@ public class CardGameManager : MonoBehaviour, IOnEventCallback
                     {
                         Debug.Log(winner + " is win");
                         gameOverPanel.SetActive(true);
+                        winSource.PlayOneShot(winAudioClip, 0.3f);
                         winnerText.text = winner == P1 ? $"{P1.NickName.text} WIN" : $"{P2.NickName.text} WIN";
                         ResetPlayers();
                         ChangeState(GameState.GameOver);
