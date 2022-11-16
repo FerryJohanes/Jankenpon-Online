@@ -8,7 +8,7 @@ public class SettingsScript : MonoBehaviour
 {
     // [SerializeField] GameObject settingCanvas;
     public TMPro.TMP_Dropdown resolutionDropdown;
-    //public AudioSource audioSource;
+    public AudioSource audioSource;
     Resolution[] resolutions; // Membuat array resolusi
 
     void Start()
@@ -51,15 +51,15 @@ public class SettingsScript : MonoBehaviour
         QualitySettings.SetQualityLevel(qualityIndex);
     }
 
-    // Audio
-    //public void SetVolume(float volume) //Volume
-    //{
-    //    audioSource.volume = volume;
-    //}
-    //public void SetMuteAudio(bool isMuted) //Mute
-    //{
-    //    audioSource.mute = isMuted;
-    //}
+    //Audio
+    public void SetVolume(float volume) //Volume
+    {
+        audioSource.volume = volume;
+    }
+    public void SetMuteAudio(bool isMuted) //Mute
+    {
+        audioSource.mute = isMuted;
+    }
 
     //Set Active
     public void SetActive(bool isActive)
