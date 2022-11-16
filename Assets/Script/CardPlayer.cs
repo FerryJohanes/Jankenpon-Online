@@ -6,15 +6,17 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Player : MonoBehaviour
+public class CardPlayer : MonoBehaviour
 {
     public Transform atkPosRef;        
     public Card chosenCard;
-    public HealthBar healthBar;
     public TMP_Text healthText;
+    public TMP_Text nameText;
+    public HealthBar healthBar;
     public float Health;
     public float MaxHealth;
     private Tweener animationTweener;
+    public TMP_Text NickName { get => nameText; }
 
     private void Start()
     {
@@ -74,7 +76,7 @@ public class Player : MonoBehaviour
     {
         animationTweener = chosenCard.transform
             .DOMove(chosenCard.OriginalPosition, 1)
-            .SetEase(Ease.InBack)
+            // .SetEase(Ease.OutCirc)
             .SetDelay(0.2f);
     }
 

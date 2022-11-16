@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class Card : MonoBehaviour
 {
     public Attack AttackValue;
-    public Player player;
+    public CardPlayer player;
     public Vector2 OriginalPosition;
     Vector2 originalScale;
     Color originalcolor;

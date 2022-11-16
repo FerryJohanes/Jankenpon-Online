@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Bot : MonoBehaviour
 {
-    public Player player;
-    public GameManager gameManager;
+    public CardPlayer player;
+    public CardGameManager gameManager;
     public float choosingInterval;
     private float timer = 0;
 
@@ -20,7 +20,7 @@ public class Bot : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (gameManager.State != GameManager.GameState.ChooseAttack)
+        if (gameManager.State != CardGameManager.GameState.ChooseAttack)
         {
             timer = 0;
             return;

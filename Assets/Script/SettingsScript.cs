@@ -6,12 +6,14 @@ using UnityEngine.UI;
 
 public class SettingsScript : MonoBehaviour
 {
+    // [SerializeField] GameObject settingCanvas;
     public TMPro.TMP_Dropdown resolutionDropdown;
     //public AudioSource audioSource;
     Resolution[] resolutions; // Membuat array resolusi
 
     void Start()
     {
+        // settingCanvas.SetActive(false);
         resolutions = Screen.resolutions;
         resolutionDropdown.ClearOptions();
         List<string> options = new List<string>();
