@@ -5,13 +5,13 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: Assets/Scenes/SampleScene.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 0
-    path: Assets/Scenes/Tugas UI.unity
-    guid: c3f4fc66f34607947a71815bfd63854e
   - enabled: 1
-    path: Assets/Scenes/Ikang Tugas UI.unity
-    guid: c9a938e6ebe772b43b829cffc5547e37
+    path: Assets/Scenes/Gameplay.unity
+    guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/Main Menu.unity
+    guid: b61a616150d76c244be1b0fc121d76b7
+  - enabled: 1
+    path: Assets/Scenes/Lobby.unity
+    guid: c242ff5b41a603c4094e68d19b2dfe35
   m_configObjects: {}
