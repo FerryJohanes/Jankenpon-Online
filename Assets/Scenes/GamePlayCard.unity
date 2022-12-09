@@ -209,7 +209,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 47008982}
         m_TargetAssemblyTypeName: Card, Assembly-CSharp
-        m_MethodName: Onclick
+        m_MethodName: OnClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -266,14 +266,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 47008977}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 380811abd01a09e4aa5195585105e022, type: 3}
+  m_Script: {fileID: 11500000, guid: 5dde2000eac157d40843f2e0cd8c34da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AttackValue: 0
+  attackValue: 0
   player: {fileID: 2094640670}
-  OriginalPosition: {x: 0, y: 0}
-  pickAudioClip: {fileID: 8300000, guid: 62ad9288afcb7d04abea623c18991343, type: 3}
-  pickSource: {fileID: 1155572464}
+  OriginalPositition: {x: 0, y: 0}
 --- !u!1 &48393563
 GameObject:
   m_ObjectHideFlags: 0
@@ -551,7 +549,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 96840483}
         m_TargetAssemblyTypeName: Card, Assembly-CSharp
-        m_MethodName: Onclick
+        m_MethodName: OnClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -608,14 +606,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 96840478}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 380811abd01a09e4aa5195585105e022, type: 3}
+  m_Script: {fileID: 11500000, guid: 5dde2000eac157d40843f2e0cd8c34da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AttackValue: 1
+  attackValue: 1
   player: {fileID: 2094640670}
-  OriginalPosition: {x: 0, y: 0}
-  pickAudioClip: {fileID: 8300000, guid: 62ad9288afcb7d04abea623c18991343, type: 3}
-  pickSource: {fileID: 1155572464}
+  OriginalPositition: {x: 0, y: 0}
 --- !u!1 &96996648
 GameObject:
   m_ObjectHideFlags: 0
@@ -702,7 +698,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 96996653}
         m_TargetAssemblyTypeName: Card, Assembly-CSharp
-        m_MethodName: Onclick
+        m_MethodName: OnClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -759,14 +755,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 96996648}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 380811abd01a09e4aa5195585105e022, type: 3}
+  m_Script: {fileID: 11500000, guid: 5dde2000eac157d40843f2e0cd8c34da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AttackValue: 2
+  attackValue: 2
   player: {fileID: 1019427090}
-  OriginalPosition: {x: 0, y: 0}
-  pickAudioClip: {fileID: 8300000, guid: 62ad9288afcb7d04abea623c18991343, type: 3}
-  pickSource: {fileID: 1155572464}
+  OriginalPositition: {x: 0, y: 0}
 --- !u!1 &124937745
 GameObject:
   m_ObjectHideFlags: 0
@@ -929,7 +923,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1155572463}
         m_TargetAssemblyTypeName: GamePlayNetworkManager, Assembly-CSharp
-        m_MethodName: Replay
+        m_MethodName: BackToLobby
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1487,7 +1481,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 432825164}
         m_TargetAssemblyTypeName: Card, Assembly-CSharp
-        m_MethodName: Onclick
+        m_MethodName: OnClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1544,14 +1538,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 432825159}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 380811abd01a09e4aa5195585105e022, type: 3}
+  m_Script: {fileID: 11500000, guid: 5dde2000eac157d40843f2e0cd8c34da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AttackValue: 2
+  attackValue: 2
   player: {fileID: 2094640670}
-  OriginalPosition: {x: 0, y: 0}
-  pickAudioClip: {fileID: 8300000, guid: 62ad9288afcb7d04abea623c18991343, type: 3}
-  pickSource: {fileID: 1155572464}
+  OriginalPositition: {x: 0, y: 0}
 --- !u!1 &481701013
 GameObject:
   m_ObjectHideFlags: 0
@@ -2611,16 +2603,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 1019427088}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef87ccd7d2ba8274caf0b62cfaea88fd, type: 3}
+  m_Script: {fileID: 11500000, guid: 053a13be2b48a8741abac40e75e446f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  atkPosRef: {fileID: 740522537}
+  attackPosRef: {fileID: 740522537}
   chosenCard: {fileID: 0}
-  healthText: {fileID: 1460053773}
   nameText: {fileID: 1887308256}
+  healthText: {fileID: 1460053773}
   healthBar: {fileID: 1073261386}
+  IsReady: 0
+  audioSource: {fileID: 1155572464}
+  damageClip: {fileID: 8300000, guid: 1c443acf4febf394f88d3402e5f023b9, type: 3}
   Health: 100
-  MaxHealth: 100
+  stats:
+    MaxHealth: 100
+    RestoreValue: 5
+    DamageValue: 10
 --- !u!1 &1073261382
 GameObject:
   m_ObjectHideFlags: 0
@@ -2707,7 +2705,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1073261382}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 155436f6abad5524ebb72c486e6eb460, type: 3}
+  m_Script: {fileID: 11500000, guid: 0c48044c895c6754cb0fb071d5df22b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   image: {fileID: 1073261384}
@@ -2739,26 +2737,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 1155572460}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74ab1661cc8a1fc49bb477d38dd84344, type: 3}
+  m_Script: {fileID: 11500000, guid: 673eb33c19ae67041b9002e54bbc90c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  netPlayerPrefab: {fileID: 1221291274976041528, guid: c75f6ef07655bc341906a4fe92fe1a9a, type: 3}
+  netPlayerPrefab: {fileID: 5554368752074587299, guid: 7241a7f13aa19b34f98111288ee3a22d, type: 3}
   P1: {fileID: 1019427090}
   P2: {fileID: 2094640670}
-  maxHealth: 100
-  restoreValue: 5
-  damageValue: 10
-  State: 2
-  NextState: 2
+  defaultPlayerStats:
+    MaxHealth: 100
+    RestoreValue: 5
+    DamageValue: 10
+  State: 0
+  NextState: 0
   gameOverPanel: {fileID: 365592701}
   winnerText: {fileID: 531365639}
   pingText: {fileID: 910577986}
-  damageAudioClip: {fileID: 8300000, guid: 806be05fc4a5bb04184715a1d7a7b81e, type: 3}
-  damageSource: {fileID: 1155572464}
-  winAudioClip: {fileID: 8300000, guid: a367514e78186de46967235280bd1ee8, type: 3}
-  winSource: {fileID: 1155572464}
-  drawAudioClip: {fileID: 8300000, guid: 1c443acf4febf394f88d3402e5f023b9, type: 3}
-  drawSource: {fileID: 1155572464}
   Online: 1
 --- !u!4 &1155572462
 Transform:
@@ -2784,7 +2777,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1155572460}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a158b4dc2f45c14c8c79d54a796b7f8, type: 3}
+  m_Script: {fileID: 11500000, guid: 4b4f28fe119fd074faf1c2a0edca1036, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!82 &1155572464
@@ -2797,7 +2790,7 @@ AudioSource:
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
-  m_audioClip: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 62ad9288afcb7d04abea623c18991343, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
@@ -3280,7 +3273,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1381960837}
         m_TargetAssemblyTypeName: Card, Assembly-CSharp
-        m_MethodName: Onclick
+        m_MethodName: OnClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3337,14 +3330,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1381960832}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 380811abd01a09e4aa5195585105e022, type: 3}
+  m_Script: {fileID: 11500000, guid: 5dde2000eac157d40843f2e0cd8c34da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AttackValue: 1
+  attackValue: 1
   player: {fileID: 1019427090}
-  OriginalPosition: {x: 0, y: 0}
-  pickAudioClip: {fileID: 8300000, guid: 62ad9288afcb7d04abea623c18991343, type: 3}
-  pickSource: {fileID: 1155572464}
+  OriginalPositition: {x: 0, y: 0}
 --- !u!1 &1424777924
 GameObject:
   m_ObjectHideFlags: 0
@@ -3741,7 +3732,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1568474643}
         m_TargetAssemblyTypeName: Card, Assembly-CSharp
-        m_MethodName: Onclick
+        m_MethodName: OnClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3798,14 +3789,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1568474638}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 380811abd01a09e4aa5195585105e022, type: 3}
+  m_Script: {fileID: 11500000, guid: 5dde2000eac157d40843f2e0cd8c34da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AttackValue: 0
+  attackValue: 0
   player: {fileID: 1019427090}
-  OriginalPosition: {x: 0, y: 0}
-  pickAudioClip: {fileID: 8300000, guid: 62ad9288afcb7d04abea623c18991343, type: 3}
-  pickSource: {fileID: 1155572464}
+  OriginalPositition: {x: 0, y: 0}
 --- !u!1 &1659690061
 GameObject:
   m_ObjectHideFlags: 0
@@ -4512,16 +4501,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 2094640668}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef87ccd7d2ba8274caf0b62cfaea88fd, type: 3}
+  m_Script: {fileID: 11500000, guid: 053a13be2b48a8741abac40e75e446f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  atkPosRef: {fileID: 1659690062}
+  attackPosRef: {fileID: 1659690062}
   chosenCard: {fileID: 0}
-  healthText: {fileID: 1313282971}
   nameText: {fileID: 1691158980}
+  healthText: {fileID: 1313282971}
   healthBar: {fileID: 2105995636}
+  IsReady: 0
+  audioSource: {fileID: 1155572464}
+  damageClip: {fileID: 8300000, guid: 1c443acf4febf394f88d3402e5f023b9, type: 3}
   Health: 100
-  MaxHealth: 100
+  stats:
+    MaxHealth: 100
+    RestoreValue: 5
+    DamageValue: 10
 --- !u!1 &2094836838
 GameObject:
   m_ObjectHideFlags: 0
@@ -4674,7 +4669,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2105995632}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 155436f6abad5524ebb72c486e6eb460, type: 3}
+  m_Script: {fileID: 11500000, guid: 0c48044c895c6754cb0fb071d5df22b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   image: {fileID: 2105995634}

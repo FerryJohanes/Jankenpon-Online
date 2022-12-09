@@ -1,9 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using Photon.Pun;
-using TMPro;
 using Photon.Realtime;
+using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class LobbyManager : MonoBehaviourPunCallbacks
@@ -14,17 +15,16 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     [SerializeField] GameObject roomPanel;
     [SerializeField] TMP_Text roomNameText;
     [SerializeField] GameObject RoomListObject;
-    [SerializeField] GameObject playerListObject;
+    [SerializeField] GameObject PlayerListObject;
     [SerializeField] RoomItem roomItemPrefab;
     [SerializeField] PlayerItem playerItemPrefab;
-    List<RoomItem> roomItemList = new List<RoomItem>();
     List<PlayerItem> playerItemList = new List<PlayerItem>();
+    List<RoomItem> roomItemList = new List<RoomItem>();
     Dictionary<string, RoomInfo> roomInfoCache = new Dictionary<string, RoomInfo>();
 
     private void Start()
     {
         PhotonNetwork.JoinLobby();
-        roomPanel.SetActive(false);
     }
     public void ClickCreateRoom()
     {
@@ -34,7 +34,6 @@ public class LobbyManager : MonoBehaviourPunCallbacks
             feedbackText.text = "Room Name Min 3 Characters";
             return;
         }
-        
         RoomOptions roomOptions = new RoomOptions();
         roomOptions.MaxPlayers = 5;
         PhotonNetwork.CreateRoom(newRoomInputField.text, roomOptions);
@@ -42,92 +41,100 @@ public class LobbyManager : MonoBehaviourPunCallbacks
 
     public void ClickStartGame(string levelName)
     {
-        if(PhotonNetwork.IsMasterClient)
+        if (PhotonNetwork.IsMasterClient)
         {
             PhotonNetwork.CurrentRoom.IsOpen = false;
             PhotonNetwork.LoadLevel(levelName);
         }
+
     }
 
     public void JoinRoom(string roomName)
     {
         PhotonNetwork.JoinRoom(roomName);
     }
+
     public override void OnCreatedRoom()
     {
-        Debug.Log("Created room: " + PhotonNetwork.CurrentRoom.Name);
-        feedbackText.text = "Created room: " + PhotonNetwork.CurrentRoom.Name;
+        Debug.Log("Created Room : " + PhotonNetwork.CurrentRoom.Name);
+        feedbackText.text = "Created Room : " + PhotonNetwork.CurrentRoom.Name;
     }
-    
+
     public override void OnJoinedRoom()
     {
-        Debug.Log("Joined room: " + PhotonNetwork.CurrentRoom.Name);
-        feedbackText.text = "Joined room: " + PhotonNetwork.CurrentRoom.Name;
+        Debug.Log("Joined Room :" + PhotonNetwork.CurrentRoom.Name);
+        feedbackText.text = "Joined Room : " + PhotonNetwork.CurrentRoom.Name;
         roomNameText.text = PhotonNetwork.CurrentRoom.Name;
         roomPanel.SetActive(true);
-
-        // update player list
+        //update player list
         UpdatePlayerList();
 
-        //atur start game button
-        SetStartGameButton();
+        //atur button start game
+        SetStartGameBUtton();
+
     }
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
-        // update player list
+        //update player list
         UpdatePlayerList();
     }
 
     public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
     {
-        // update player list
+        //update player list
         UpdatePlayerList();
     }
 
     public override void OnMasterClientSwitched(Photon.Realtime.Player newMasterClient)
     {
-        //atur start game button
-        SetStartGameButton();
+        SetStartGameBUtton();
     }
 
-    private void SetStartGameButton()
+    public void SetStartGameBUtton()
     {
         StartGameButton.gameObject.SetActive(PhotonNetwork.IsMasterClient);
 
         StartGameButton.interactable = PhotonNetwork.CurrentRoom.PlayerCount >= 2;
     }
 
+   public void ClickLeaveRoom () {
+        PhotonNetwork.LeaveRoom();
+   }
+
     private void UpdatePlayerList()
     {
-        //destroy gameobject dalam player item dan diclear
+        // destroy dulu semua player item yang sudah ada
         foreach (var item in playerItemList)
         {
             Destroy(item.gameObject);
         }
-
         playerItemList.Clear();
-        
-        // foreach (Photon.Realtime.Player player in PhotonNetwork.PlayerList)
 
+        // PhotonNetwork.PlayerList (Alternative)
+        // foreach(Photon.Realtime.Player player in PhotonNetwork.PlayerList) 
         foreach (var (id, player) in PhotonNetwork.CurrentRoom.Players)
         {
-            PlayerItem newPlayerItem = Instantiate(playerItemPrefab, playerListObject.transform);
+            PlayerItem newPlayerItem = Instantiate(playerItemPrefab, PlayerListObject.transform);
             newPlayerItem.Set(player);
             playerItemList.Add(newPlayerItem);
 
             if (player == PhotonNetwork.LocalPlayer)
+            {
                 newPlayerItem.transform.SetAsFirstSibling();
+            }
+
         }
 
-        // start game hanya bisa diatur
-        SetStartGameButton();
+        // start game hanya bisa diklik ketika jumlah pemain tertentu
+        // jadi atur juga disini
+        SetStartGameBUtton();
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)
     {
-        Debug.Log(returnCode+","+ message);
-        feedbackText.text = returnCode.ToString() +": " + message;
+        Debug.Log(returnCode + " " + message);
+        feedbackText.text = returnCode + " " + message;
     }
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
@@ -137,29 +144,34 @@ public class LobbyManager : MonoBehaviourPunCallbacks
             roomInfoCache[roomInfo.Name] = roomInfo;
         }
 
+        Debug.Log("Room List Updated");
+
         foreach (var item in this.roomItemList)
         {
             Destroy(item.gameObject);
         }
+
         this.roomItemList.Clear();
 
-        var roomInfoList = new List<RoomInfo> (roomInfoCache.Count);
-        
-        // Sort yang open di add duluan
+        var roomInfoList = new List<RoomInfo>(roomInfoCache.Count);
+
+        // sort yang open dibuat pertama
         foreach (var roomInfo in roomInfoCache.Values)
         {
-            if(roomInfo.IsOpen)
+            if (roomInfo.IsOpen)
                 roomInfoList.Add(roomInfo);
         }
-        // Sort yang Close
+
+        // kemudian close
         foreach (var roomInfo in roomInfoCache.Values)
         {
-            if(roomInfo.IsOpen == false)
+            if (roomInfo.IsOpen == false)
                 roomInfoList.Add(roomInfo);
         }
+
         foreach (var roomInfo in roomInfoList)
         {
-            if(roomInfo.MaxPlayers == 0)
+            if (roomInfo.MaxPlayers == 0 || roomInfo.IsVisible == false)
                 continue;
 
             RoomItem newRoomItem = Instantiate(roomItemPrefab, RoomListObject.transform);
@@ -167,5 +179,4 @@ public class LobbyManager : MonoBehaviourPunCallbacks
             this.roomItemList.Add(newRoomItem);
         }
     }
- 
 }

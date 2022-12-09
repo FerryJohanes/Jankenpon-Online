@@ -1,82 +1,70 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System;
-using UnityEngine;
+using Photon.Pun;
 using TMPro;
+using UnityEngine;
 using UnityEngine.UI;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
-using Photon.Pun;
 
 public class PropertySetting : MonoBehaviourPunCallbacks
 {
-    [SerializeField]
-    Slider slider;
+    [SerializeField] Slider slider;
+    [SerializeField] TMP_InputField inputField;
+    [SerializeField] string propertyKey;
+    [SerializeField] float initialValue = 50;
+    [SerializeField] float minValue = 0;
+    [SerializeField] float maxValue = 100;
+    [SerializeField] bool wholeNumbers = true;
 
-    [SerializeField]
-    TMP_InputField inputField;
-
-    [SerializeField]
-    string propertyKey;
-
-    [SerializeField]
-    float initialValue = 50;
-
-    [SerializeField]
-    float minlValue = 0;
-
-    [SerializeField]
-    float maxValue = 100;
-
-    [SerializeField]
-    bool wholeNumbers = true;
-
-    private void Start()
-    {
-        slider.minValue = minlValue;
+    private void Start() {
+        //!setup semua UI
+        slider.minValue = minValue;
         slider.maxValue = maxValue;
         slider.wholeNumbers = wholeNumbers;
-        inputField.contentType = wholeNumbers
-            ? TMP_InputField.ContentType.IntegerNumber
-            : TMP_InputField.ContentType.DecimalNumber;
+        inputField.contentType = wholeNumbers ? TMP_InputField.ContentType.IntegerNumber : TMP_InputField.ContentType.DecimalNumber;
 
-        if (PhotonNetwork.IsMasterClient == false)
-        {
+        //! ambil initial value dari server kalau ada
+        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(propertyKey, out var value)) {
+            UpdateSliderInputField((float)value);
+        }
+
+        //! kalau tidak masukan initial value dari inspector
+        else {
+            UpdateSliderInputField(initialValue);
+            SetCustomProperty(initialValue);
+        }
+
+        //! ui hanya bisa di interactable oleh master saja
+        if (PhotonNetwork.IsMasterClient == false) {
             slider.interactable = false;
             inputField.interactable = false;
         }
-
-        if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(propertyKey, out var value))
-        {
-            UpdateSliderInputField((float)value);
-        }
-        else
-        {
-            UpdateSliderInputField(initialValue);
-        }
     }
 
-    public void InputFromSlider(float value)
-    {
+    //!Memasukkan data slider
+    public void InputFromSlider(float value) {
         if (PhotonNetwork.IsMasterClient == false)
             return;
+
         UpdateSliderInputField(value);
         SetCustomProperty(value);
     }
 
-    public void InputFromField(string stringValue)
-    {
+    //!Memasukkan data field
+    public void InputFromField(string stringValue) {
         if (PhotonNetwork.IsMasterClient == false)
             return;
-        if (float.TryParse(stringValue, out var floatValue))
-        {
-            floatValue = Mathf.Clamp(floatValue, slider.minValue, slider.maxValue);
+
+        if (float.TryParse(stringValue, out var floatValue)) {
+            Mathf.Clamp(floatValue, slider.minValue, slider.maxValue);
             UpdateSliderInputField(floatValue);
             SetCustomProperty(floatValue);
         }
     }
 
-    private void SetCustomProperty(float value)
-    {
+    //!update ke server
+    private void SetCustomProperty(float value) {
         if (!PhotonNetwork.IsMasterClient)
             return;
 
@@ -85,25 +73,19 @@ public class PropertySetting : MonoBehaviourPunCallbacks
         PhotonNetwork.CurrentRoom.SetCustomProperties(property);
     }
 
-    public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged)
-    {
-        if (
-            propertiesThatChanged.TryGetValue(propertyKey, out var value)
-            && PhotonNetwork.IsMasterClient == false
-        )
-        {
+    public override void OnRoomPropertiesUpdate(Hashtable propertiesThatChanged) {
+        if (propertiesThatChanged.TryGetValue(propertyKey, out var value) && PhotonNetwork.IsMasterClient == false) {
+            Debug.Log("OnRoomPropertiesUpdate");
             UpdateSliderInputField((float)value);
         }
     }
 
-    private void UpdateSliderInputField(object value)
-    {
+    private void UpdateSliderInputField(float value) {
         var floatValue = (float)value;
         slider.value = floatValue;
-
         if (wholeNumbers)
             inputField.text = (Mathf.RoundToInt(floatValue)).ToString("D");
         else
-            inputField.text = (floatValue).ToString("F2");
+            inputField.text = floatValue.ToString("F2");
     }
 }

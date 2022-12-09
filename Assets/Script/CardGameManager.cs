@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using Photon.Pun;
 using Photon.Realtime;
 using ExitGames.Client.Photon;
@@ -12,136 +13,148 @@ public class CardGameManager : MonoBehaviour, IOnEventCallback
     public GameObject netPlayerPrefab;
     public CardPlayer P1;
     public CardPlayer P2;
-    public float maxHealth = 100;
-    public float restoreValue = 5;
-    public float damageValue = 10;
-    public GameState State, NextState = GameState.NetPlayersInitialization;
+    public PlayerStats defaultPlayerStats = new PlayerStats() {
+        MaxHealth=100,
+        RestoreValue=5,
+        DamageValue=10
+    };
+    public GameState State, NextState = GameState.NetPlayersIntialization;
     public GameObject gameOverPanel;
     public TMP_Text winnerText;
     public TMP_Text pingText;
-
-    public AudioClip damageAudioClip;
-    public AudioSource damageSource;
-    public AudioClip winAudioClip;
-    public AudioSource winSource;
-    public AudioClip drawAudioClip;
-    public AudioSource drawSource;
 
     private CardPlayer damagedPlayer;
     private CardPlayer winner;
     public bool Online = true;
 
-    // public List<int> syncReadyPlayers = new List<int> (2);
-    HashSet<int> syncReadyPlayers = new HashSet<int>();
+    //public List <int> syncReadyPlayers = new List<int>(2);
+    HashSet<int> syncReadyPlayers= new HashSet<int>();
+
+    // Enum State
     public enum GameState
     {
         SyncState,
-        NetPlayersInitialization,
+        NetPlayersIntialization,
         ChooseAttack,
-        Attacks,
+        Attack,
         Damages,
         Draw,
-        GameOver,
+        GameOver
     }
+
+
     private void Start()
     {
         gameOverPanel.SetActive(false);
-        if(Online)
-        {
-            StartCoroutine(PingCoroutine());
+        //!multiplayer online
+        if(Online) {
             PhotonNetwork.Instantiate(netPlayerPrefab.name, Vector3.zero, Quaternion.identity);
-            State = GameState.NetPlayersInitialization;
-            NextState = GameState.NetPlayersInitialization;
-            if(PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("MaxHealth", out var maxHealth))
-            {this.maxHealth = (float) maxHealth;}
-            if(PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("RestoreValue", out var restoreValue))
-            {this.restoreValue = (float) restoreValue;}
-            if(PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("DamageValue", out var damageValue))
-            {this.damageValue = (float) damageValue;}
+            StartCoroutine(PingCoroutine());
+            State = GameState.NetPlayersIntialization;
+            NextState = GameState.NetPlayersIntialization;
 
+            if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(PropertyNames.Room.RestoreValue, out var RestoreValue)) {
+                defaultPlayerStats.RestoreValue = (float)RestoreValue;
+            }
+            if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(PropertyNames.Room.DamageValue, out var DamageValue)) {
+                defaultPlayerStats.DamageValue = (float)DamageValue;
+            }
+            if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue(PropertyNames.Room.MaxHealth, out var MaxHealth)) {
+                P1.stats.MaxHealth = (float)MaxHealth;
+                P2.stats.MaxHealth = (float)MaxHealth;
+            }
         }
-        else
-        {
+        else {
             State = GameState.ChooseAttack;
         }
+
+        //!bot
+        P1.SetStats(defaultPlayerStats, true);
+        P2.SetStats(defaultPlayerStats, true);
+        P1.IsReady=true;
+        P2.IsReady=true;
+        //* Mengecek posisi state
+        //     Debug.Log(state == State.ChooseAttack);
+        //     state = State.Damages;
+        //     Debug.Log(state == State.ChooseAttack);
+        //     Debug.Log(state);
+
+
     }
 
     private void Update()
     {
-
-        // ChooseAttack,
+        // Logic gameplay
         switch (State)
         {
             case GameState.SyncState:
-                if(syncReadyPlayers.Count == 2)
+                if(syncReadyPlayers.Count == 2) 
                 {
                     syncReadyPlayers.Clear();
                     State = NextState;
                 }
                 break;
-            case GameState.NetPlayersInitialization:
 
-                if (CardNetPlayer.NetPlayers.Count == 2)
+            case GameState.NetPlayersIntialization:
+                if(CardNetPlayer.NetPlayers.Count == 2) 
                 {
                     foreach (var netPlayer in CardNetPlayer.NetPlayers)
                     {
-                        if (netPlayer.photonView.IsMine) 
+                        if(netPlayer.photonView.IsMine) 
                         {
-                            netPlayer.Set(P1); 
+                            netPlayer.Set(P1);
                         }
                         else 
-                        { 
-                            netPlayer.Set(P2); 
+                        {
+                            netPlayer.Set(P2);
                         }
                     }
-                    ChangeState(GameState.ChooseAttack);
+                    ChangeState (GameState.ChooseAttack);
                 }
                 break;
 
             case GameState.ChooseAttack:
-               if(P1.AttackValue != null && P2.AttackValue != null)
+                if (P1.AttackValue != null && P2.AttackValue != null)
                 {
                     P1.AnimateAttack();
                     P2.AnimateAttack();
-                    P1.IsClickable(false);
-                    P2.IsClickable(false);
-                    ChangeState(GameState.Attacks);
+                    P1.SetClickable(false);
+                    P2.SetClickable(false);
+                    ChangeState (GameState.Attack);
                 }
                 break;
 
-            case GameState.Attacks:
+            case GameState.Attack:
                 if (P1.IsAnimating() == false && P2.IsAnimating() == false)
                 {
-                    damagedPlayer = GetDamagedPlayer();
+                    damagedPlayer = GetDamagePlayer();
                     if (damagedPlayer != null)
                     {
                         damagedPlayer.AnimateDamage();
-                        ChangeState(GameState.Damages);
-                        damageSource.PlayOneShot(damageAudioClip, 0.2f);
+                        ChangeState (GameState.Damages);
                     }
                     else
                     {
                         P1.AnimateDraw();
                         P2.AnimateDraw();
-                        ChangeState(GameState.Draw);
-                        drawSource.PlayOneShot(drawAudioClip, 0.3f);
+                        ChangeState (GameState.Draw);
                     }
                 }
-                    break;
 
+                break;
             case GameState.Damages:
                 if (P1.IsAnimating() == false && P2.IsAnimating() == false)
                 {
-                    //Calculate Health
-                    if(damagedPlayer == P1)
+                    //* Calculate Health
+                    if (damagedPlayer == P1)
                     {
-                        P1.ChangeHealth(-damageValue);
-                        P2.ChangeHealth(restoreValue);
+                        P1.ChangeHealth(-P2.stats.DamageValue);
+                        P2.ChangeHealth(-P2.stats.RestoreValue);
                     }
                     else
                     {
-                        P1.ChangeHealth(restoreValue);
-                        P2.ChangeHealth(-damageValue);
+                        P2.ChangeHealth(P1.stats.RestoreValue);
+                        P1.ChangeHealth(-P1.stats.DamageValue);
                     }
 
                     var winner = GetWinner();
@@ -149,91 +162,89 @@ public class CardGameManager : MonoBehaviour, IOnEventCallback
                     if (winner == null)
                     {
                         ResetPlayers();
-                        P1.IsClickable(true);
-                        P2.IsClickable(true);
-                        ChangeState(GameState.ChooseAttack);
+                        P1.SetClickable(true);
+                        P2.SetClickable(true);
+                        ChangeState (GameState.ChooseAttack);
                     }
                     else
                     {
-                        Debug.Log(winner + " is win");
                         gameOverPanel.SetActive(true);
-                        winSource.PlayOneShot(winAudioClip, 0.3f);
-                        winnerText.text = winner == P1 ? $"{P1.NickName.text} WIN" : $"{P2.NickName.text} WIN";
+                        winnerText.text = winner == P1 ? $"{P1.NickName.text} Wins" : $"{P2.NickName.text} Wins";
                         ResetPlayers();
-                        ChangeState(GameState.GameOver);
+                        ChangeState (GameState.GameOver);
                     }
+
                 }
-                    break;
+                break;
             case GameState.Draw:
                 if (P1.IsAnimating() == false && P2.IsAnimating() == false)
                 {
                     ResetPlayers();
-                    P1.IsClickable(true);
-                    P2.IsClickable(true);
-                    ChangeState(GameState.ChooseAttack);
+                    P1.SetClickable(true);
+                    P2.SetClickable(true);
+                    ChangeState (GameState.ChooseAttack);
                 }
-                    break;
+                break;
         }
     }
+
     private void OnEnable()
     {
         PhotonNetwork.AddCallbackTarget(this);
     }
 
-    private void OnDisable()
+    private void OnDinable()
     {
         PhotonNetwork.RemoveCallbackTarget(this);
     }
 
-    private const byte playerChangeState = 1;
+    private const byte playerChangeState=1;
 
-    private void ChangeState(GameState newState)
-    {
-        if(Online == false)
-        {
+    private void ChangeState(GameState newState) {
+        if(Online == false) {
             State = newState;
             return;
         }
-        if (this.NextState == newState)
+
+        if(this.NextState == newState)
             return;
 
-        // Kirim pesan bahwa kita ready
+        //kirim message bahwa player ready
         var actorNum = PhotonNetwork.LocalPlayer.ActorNumber;
-        var raiseEventOptions = new RaiseEventOptions
-        {
-            Receivers = ReceiverGroup.All
-        };
+        var raiseEventOptions = new RaiseEventOptions();
+        raiseEventOptions.Receivers = ReceiverGroup.All;
         PhotonNetwork.RaiseEvent(1, actorNum, raiseEventOptions, SendOptions.SendReliable);
 
-        this.State = GameState.SyncState;
+        //masuk ke state sync sebagai transisi sebelum state baru
+        this.State =  GameState.SyncState;
         this.NextState = newState;
     }
 
-    public void OnEvent(EventData photonEvent)
-    {
+    public void OnEvent (EventData photonEvent) {
         switch (photonEvent.Code)
         {
-            case playerChangeState:
-                var actorNum = (int)photonEvent.CustomData;
-                
-                // if (syncReadyPlayers.Contains(actorNum) == false)
-                syncReadyPlayers.Add(actorNum);
-                break;
+            case playerChangeState :
+                var actorNum = (int) photonEvent.CustomData;
 
+                //if(syncReadyPlayers.Contains(actorNum)==false);
+
+                //kalau pake hashset ga perlu cek lagi
+                syncReadyPlayers.Add(actorNum);
+                
+                break;
             default:
                 break;
         }
-    }
+   }
 
-    IEnumerator PingCoroutine()
-    {
-        var wait = new WaitForSeconds(2);
-        while (true)
-        {
-            pingText.text = "Ping: " + PhotonNetwork.GetPing() + " ms";
-            yield return wait;
+    IEnumerator PingCoroutine() {
+        var wait = new WaitForSeconds(1);
+        while(true) {
+            pingText.text = "ping : " + PhotonNetwork.GetPing() + " ms";
+            yield return wait;   
         }
     }
+        
 
     private void ResetPlayers()
     {
@@ -241,55 +252,60 @@ public class CardGameManager : MonoBehaviour, IOnEventCallback
         P1.Reset();
         P2.Reset();
     }
-    private CardPlayer GetDamagedPlayer()
+
+    private CardPlayer GetDamagePlayer()
     {
-        Attack? PlayerAtk1 = P1.AttackValue;
-        Attack? PlayerAtk2 = P2.AttackValue;
-        if (PlayerAtk1 == Attack.Rock && PlayerAtk2 == Attack.Paper)
+        Attack? PlayerAttack1 = P1.AttackValue;
+        Attack? PlayerAttack2 = P2.AttackValue;
+
+        if (PlayerAttack1 == Attack.Rock && PlayerAttack2 == Attack.Paper)
         {
             return P1;
         }
-        else if (PlayerAtk1 == Attack.Rock && PlayerAtk2 == Attack.Scissor)
+        else if (PlayerAttack1 == Attack.Rock && PlayerAttack2 == Attack.Scissor)
         {
             return P2;
         }
-        else if (PlayerAtk1 == Attack.Paper && PlayerAtk2 == Attack.Rock)
+        else if (PlayerAttack1 == Attack.Paper && PlayerAttack2 == Attack.Rock)
         {
             return P2;
         }
-        else if (PlayerAtk1 == Attack.Paper && PlayerAtk2 == Attack.Scissor)
+        else if (PlayerAttack1 == Attack.Paper && PlayerAttack2 == Attack.Scissor)
         {
             return P1;
         }
-        else if (PlayerAtk1 == Attack.Scissor && PlayerAtk2 == Attack.Rock)
+        else if (PlayerAttack1 == Attack.Scissor && PlayerAttack2 == Attack.Rock)
         {
             return P1;
         }
-        else if (PlayerAtk1 == Attack.Scissor && PlayerAtk2 == Attack.Paper)
+        else if (PlayerAttack1 == Attack.Scissor && PlayerAttack2 == Attack.Paper)
         {
             return P2;
         }
 
         return null;
     }
-    
+
     private CardPlayer GetWinner()
     {
         if (P1.Health == 0)
         {
             return P2;
         }
-
         else if (P2.Health == 0)
         {
             return P1;
         }
-
-        else { return null; }
+        return null;
     }
 
-    public void LoadScene(int sceneIndex)
-    {
-        SceneManager.LoadScene(sceneIndex);
+    public void Replay (string GamePlay) {
+        SceneManager.LoadScene(GamePlay);
+        Debug.Log("Ini Scene Main Menu Aktif" + GamePlay);
+    }
+
+    public void BackToHome (string MainMenu) {
+        SceneManager.LoadScene(MainMenu);
+        Debug.Log("Ini Scene Main Menu Aktif" + MainMenu);
     }
 }

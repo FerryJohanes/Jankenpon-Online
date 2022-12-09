@@ -1094,7 +1094,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1366203680}
   m_HandleRect: {fileID: 1366203679}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -3754,7 +3754,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1204272418}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: daa3c14e41b20a94ab20115a3ba4401b, type: 3}
+  m_Script: {fileID: 11500000, guid: a2d467d20f079334c8fc0c7fec4ee7c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   newRoomInputField: {fileID: 1156885009}
@@ -3763,9 +3763,9 @@ MonoBehaviour:
   roomPanel: {fileID: 1193327375}
   roomNameText: {fileID: 7200417}
   RoomListObject: {fileID: 830865304}
-  playerListObject: {fileID: 616003883}
-  roomItemPrefab: {fileID: 8987252636929723680, guid: a06fdd07a4ed712479c60b841a927a38, type: 3}
-  playerItemPrefab: {fileID: 368798459139909294, guid: e11a2ead4f419ad4faec616c91fb092f, type: 3}
+  PlayerListObject: {fileID: 616003883}
+  roomItemPrefab: {fileID: 7774234517956952736, guid: 210f4c51ff43acb489b730f7cd292532, type: 3}
+  playerItemPrefab: {fileID: 7654744396816206241, guid: 46fcdb677606d544d90deeb0bbe47489, type: 3}
 --- !u!4 &1204272420
 Transform:
   m_ObjectHideFlags: 0
@@ -3790,7 +3790,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1204272418}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a158b4dc2f45c14c8c79d54a796b7f8, type: 3}
+  m_Script: {fileID: 11500000, guid: 4b4f28fe119fd074faf1c2a0edca1036, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1228548219
@@ -5150,14 +5150,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1579877730}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2b687636c1dbf340954c77d568af949, type: 3}
+  m_Script: {fileID: 11500000, guid: 161022e566f916c4fb8b4211aa833aa3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   slider: {fileID: 853783801}
   inputField: {fileID: 1364971272}
   propertyKey: RestoreValue
   initialValue: 5
-  minlValue: 0
+  minValue: 0
   maxValue: 100
   wholeNumbers: 1
 --- !u!1 &1583414613
@@ -5209,14 +5209,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 1583414613}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2b687636c1dbf340954c77d568af949, type: 3}
+  m_Script: {fileID: 11500000, guid: 161022e566f916c4fb8b4211aa833aa3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   slider: {fileID: 592147399}
   inputField: {fileID: 1537591721}
   propertyKey: MaxHealth
   initialValue: 100
-  minlValue: 0
+  minValue: 0
   maxValue: 100
   wholeNumbers: 1
 --- !u!1 &1661522915
@@ -6302,14 +6302,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 2062309385}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2b687636c1dbf340954c77d568af949, type: 3}
+  m_Script: {fileID: 11500000, guid: 161022e566f916c4fb8b4211aa833aa3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   slider: {fileID: 2114378627}
   inputField: {fileID: 6445457}
   propertyKey: DamageValue
   initialValue: 10
-  minlValue: 0
+  minValue: 0
   maxValue: 100
   wholeNumbers: 1
 --- !u!1 &2114378626
